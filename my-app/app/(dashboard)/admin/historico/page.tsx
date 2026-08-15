@@ -14,17 +14,25 @@ export default function Home() {
         />
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            Landing Page
+            Admin 2 - Historico
           </h1>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
             className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="http://localhost:3000/books"
+            href="http://localhost:3000/admin"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Ver biblioteca
+            Lista de livros
+          </a>
+          <a
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+            href="http://localhost:3000/admin/adicionar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Adicionar livro
           </a>
         </div>
       </main>
