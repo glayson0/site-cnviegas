@@ -24,35 +24,39 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleStandardLogin = (e: React.FormEvent) => {
+  const handleStandardLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
 
+    setError(null);
     setLoading(true);
-    setTimeout(() => {
-      const ok = login(email, password);
-      setLoading(false);
-      if (ok) {
-        addToast('Bem-vindo!', `Login efetuado com sucesso para ${email}.`);
-        if (email.toLowerCase().includes('admin')) {
-          router.push('/admin');
-        } else {
-          router.push('/readers');
-        }
-      }
-    }, 400);
+    const result = await login(email, password);
+    setLoading(false);
+    if (!result.ok) {
+      setError(result.error ?? 'Não foi possível entrar.');
+      return;
+    }
+    addToast('Bem-vindo!', `Login efetuado com sucesso para ${email}.`);
+    router.push('/');
   };
 
-  const handleDemoLogin = (role: 'reader' | 'admin') => {
-    loginAsDemo(role);
-    if (role === 'admin') {
+  const handleDemoLogin = async (demoRole: 'reader' | 'admin') => {
+    setError(null);
+    setLoading(true);
+    const result = await loginAsDemo(demoRole);
+    setLoading(false);
+    if (!result.ok) {
+      setError(result.error ?? 'Não foi possível entrar com a conta demo.');
+      return;
+    }
+    if (demoRole === 'admin') {
       addToast('Modo Admin', 'Conectado como Coordenação do Coletivo.');
-      router.push('/admin');
     } else {
       addToast('Modo Leitor', 'Conectado como Carlos Henrique (Membro Leitor).');
-      router.push('/readers');
     }
+    router.push('/');
   };
 
   return (
@@ -154,9 +158,6 @@ export default function LoginPage() {
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-600"
                 />
               </div>
-              <p className="text-[10px] text-zinc-400">
-                * Dica: Qualquer e-mail com a palavra &quot;admin&quot; loga com permissões de gestão.
-              </p>
             </div>
 
             <div className="space-y-1">
@@ -174,6 +175,12 @@ export default function LoginPage() {
                 />
               </div>
             </div>
+
+            {error && (
+              <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
