@@ -34,13 +34,15 @@ export async function proxy(request: NextRequest) {
   const needsSession = path.startsWith('/admin') || path.startsWith('/readers')
 
   // Redirect responses must carry the refreshed auth cookies, or the session
-  // is lost on the very next request.
+  // is lost on the very next request. Copying the raw Set-Cookie headers
+  // (rather than just name/value) preserves maxAge/path/etc exactly as
+  // Supabase emitted them.
   const redirectTo = (pathname: string) => {
     const url = request.nextUrl.clone()
     url.pathname = pathname
     const response = NextResponse.redirect(url)
-    supabaseResponse.cookies.getAll().forEach(({ name, value }) => {
-      response.cookies.set(name, value)
+    supabaseResponse.headers.getSetCookie().forEach((cookie) => {
+      response.headers.append('set-cookie', cookie)
     })
     return response
   }
