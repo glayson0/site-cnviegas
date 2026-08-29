@@ -1,5 +1,5 @@
 begin;
-select plan(6);
+select plan(7);
 
 create function pg_temp.make_user(p_id uuid, p_email text, p_name text)
 returns void language plpgsql as $$
@@ -87,6 +87,28 @@ select throws_ok(
   'the last admin cannot be demoted'
 );
 reset role;
+
+-- Binding guard: `for update` in the demotion branch above is the fix for
+-- a real vulnerability -- without it, two concurrent demotions can each
+-- read the same pre-demotion admin_count under READ COMMITTED (a
+-- concurrent, uncommitted UPDATE is invisible to a plain SELECT), both
+-- conclude "not the last admin", and both commit, leaving the collective
+-- with zero admins and no in-app recovery path (promoting a new admin
+-- itself requires an existing admin). Mutation testing proved the lock can
+-- be deleted with the whole suite above still green, because tests 1-6 run
+-- on a single connection and can only observe the *symptom* a second,
+-- concurrent connection would trigger -- not the race itself. Pin the
+-- lock's literal presence in the function body so silently deleting it is
+-- no longer free.
+-- Anchored to the actual code shape (the admin_count subquery), not just
+-- the substring "for update" -- the function's own explanatory comments
+-- above mention "for update" in prose several times, so a bare substring
+-- match would still pass even with the real clause deleted.
+select matches(
+  pg_get_functiondef('public.set_user_role(uuid, text)'::regprocedure),
+  $pat$profiles where role = 'admin' for update\) t$pat$,
+  'set_user_role retains the FOR UPDATE row lock guarding against concurrent double-demotion to zero admins'
+);
 
 select * from finish();
 rollback;
