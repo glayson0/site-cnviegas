@@ -1,5 +1,5 @@
 begin;
-select plan(6);
+select plan(7);
 
 -- Fixtures: one reader, one admin, one bystander.
 create function pg_temp.make_user(p_id uuid, p_email text, p_name text)
@@ -52,6 +52,15 @@ select lives_ok(
   'reader can update their own bio'
 );
 
+-- lives_ok alone only proves no error was raised; it would still pass if the
+-- update policy were dropped and the UPDATE silently touched zero rows. Read
+-- the value back to prove the write actually landed.
+select is(
+  (select bio from public.profiles where id = 'a0000000-0000-0000-0000-000000000001'),
+  'nova bio',
+  'reader''s bio update actually persisted'
+);
+
 -- RLS must hide other users' rows, so this updates nothing.
 update public.profiles set bio = 'invadido'
   where id = 'a0000000-0000-0000-0000-000000000003';
@@ -72,13 +81,16 @@ select is(
 );
 reset role;
 
--- Anonymous users must see nothing at all in the base table.
+-- Anonymous users must see nothing at all in the base table. With no base
+-- SELECT grant at all for anon, this fails at the table-privilege check
+-- before RLS is ever consulted -- a stronger guarantee than an empty result.
 set local role anon;
 -- '{}' not '': auth.uid() casts this to jsonb, and ''::jsonb throws.
 set local "request.jwt.claims" to '{}';
-select is(
-  (select count(*)::int from public.profiles),
-  0,
+select throws_ok(
+  $q$ select count(*)::int from public.profiles $q$,
+  '42501',
+  null,
   'anonymous users cannot read profiles'
 );
 reset role;

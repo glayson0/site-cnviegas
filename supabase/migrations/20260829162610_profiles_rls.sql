@@ -24,19 +24,37 @@ create policy "profiles_update_own_or_admin"
   using ( id = (select auth.uid()) or public.is_admin() )
   with check ( id = (select auth.uid()) or public.is_admin() );
 
--- This project's default privileges withhold SELECT/INSERT/UPDATE on public
--- schema tables from anon/authenticated by default (only Dxtm is granted
--- automatically). Without this base SELECT grant, the policies above are
--- unreachable: the table-level privilege check runs before RLS is ever
--- consulted, so every select would fail with "permission denied for table
--- profiles" instead of being filtered by the policies. Granting it to anon
--- too is safe: neither select policy applies "to anon", so RLS still hides
--- every row from anonymous requests.
-grant select on public.profiles to authenticated, anon;
+-- This project's default privileges grant anon/authenticated TRUNCATE,
+-- REFERENCES, TRIGGER, and MAINTAIN on every public-schema table created by
+-- role postgres ("Dxtm" -- the capital D is TRUNCATE, not DELETE). Left in
+-- place, this is a full bypass of everything above: TRUNCATE empties the
+-- table without ever consulting RLS, and TRIGGER lets any authenticated or
+-- anon session attach its own trigger (even one defined in pg_temp) that
+-- rewrites protected columns -- including role -- on every UPDATE, since
+-- column-level privileges are checked only against the columns named in the
+-- client's SET list, never against what a later trigger assigns. Strip every
+-- inherited default privilege before granting back exactly what's needed.
+revoke all on public.profiles from anon, authenticated;
+
+-- Base SELECT is required for the policies above to be reachable at all:
+-- the table-level grant is checked before RLS is ever consulted, so without
+-- it every select fails with "permission denied for table profiles"
+-- regardless of policy. Scoped to authenticated only: granting it to anon
+-- too would be unnecessary blast radius the moment a future policy omits an
+-- explicit `to` clause (which defaults to PUBLIC, exposing anon through it).
+-- With no grant at all, RLS still does its job for anon -- the table-level
+-- check now simply denies anon a step earlier, which is a stronger "cannot
+-- read profiles" than an empty result set.
+grant select on public.profiles to authenticated;
+
+-- service_role is never reachable from the browser, but Supabase's
+-- server-side tooling (service-role API calls, pg_meta, Studio) expects it
+-- to be able to read every table; it isn't covered by the inherited default
+-- privileges either.
+grant select on public.profiles to service_role;
 
 -- RLS cannot compare against the old row value, so column privileges are
 -- what actually stop a user rewriting their own role. This binds admins too;
 -- role changes go exclusively through public.set_user_role (Task 5).
-revoke update on public.profiles from authenticated;
 grant update (name, avatar, phone, bio, interests)
   on public.profiles to authenticated;
