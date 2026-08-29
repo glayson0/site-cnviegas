@@ -18,6 +18,16 @@ begin
   );
 end; $$;
 
+-- Neutralize any pre-existing admins (e.g. the seeded demo admin from
+-- supabase/seed.sql) before establishing this test's own baseline. The
+-- last-admin invariant below only means something if this test controls
+-- exactly how many admins exist; without this, a seeded admin sitting in
+-- the table makes "the last admin cannot be demoted" false regardless of
+-- what the function does. This update runs inside this file's own
+-- `begin ... rollback`, so it can never leak out and actually demote the
+-- real seeded admin -- it is undone the moment this transaction ends.
+update public.profiles set role = 'reader' where role = 'admin';
+
 select pg_temp.make_user('b0000000-0000-0000-0000-000000000001', 'reader@test.org', 'Reader');
 select pg_temp.make_user('b0000000-0000-0000-0000-000000000002', 'admin@test.org', 'Admin');
 

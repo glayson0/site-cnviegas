@@ -74,8 +74,17 @@ select is(
 -- Act as the admin.
 set local role authenticated;
 set local "request.jwt.claims" to '{"sub":"a0000000-0000-0000-0000-000000000002","role":"authenticated"}';
+-- Filtered to this test's OWN fixture ids, not a bare table-wide count:
+-- the profiles table may also hold seed data (or any other fixtures) that
+-- have nothing to do with this test, and a bare count(*) would break the
+-- moment any other row exists. The point being tested is that the admin's
+-- RLS policy lets them see rows besides their own (the reader above could
+-- only see 1 of these same 3), which this filtered count still proves.
 select is(
-  (select count(*)::int from public.profiles),
+  (select count(*)::int from public.profiles
+     where id in ('a0000000-0000-0000-0000-000000000001',
+                  'a0000000-0000-0000-0000-000000000002',
+                  'a0000000-0000-0000-0000-000000000003')),
   3,
   'admin sees every profile row'
 );
