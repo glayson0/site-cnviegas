@@ -1,5 +1,5 @@
 begin;
-select plan(4);
+select plan(6);
 
 create function pg_temp.make_user(p_id uuid, p_email text, p_name text)
 returns void language plpgsql as $$
@@ -48,6 +48,32 @@ select is(
   'admin',
   'promotion persisted'
 );
+
+-- The allowlist guard must be self-contained: a NULL new_role must be
+-- rejected by the FUNCTION itself with 22023, not fall through to the
+-- profiles.role NOT NULL column constraint (23502). Mutation testing showed
+-- the whole allowlist branch can be deleted and the original 4 tests still
+-- pass, so this pins the specific errcode the function itself must raise.
+set local role authenticated;
+set local "request.jwt.claims" to '{"sub":"b0000000-0000-0000-0000-000000000002","role":"authenticated"}';
+select throws_ok(
+  $q$ select public.set_user_role(
+        'b0000000-0000-0000-0000-000000000001'::uuid, null) $q$,
+  '22023',
+  null,
+  'NULL new_role is rejected by the function itself, not the NOT NULL column constraint'
+);
+
+-- General coverage for the invalid-role branch, so the allowlist check
+-- itself cannot be silently deleted without a test failing.
+select throws_ok(
+  $q$ select public.set_user_role(
+        'b0000000-0000-0000-0000-000000000001'::uuid, 'superadmin') $q$,
+  '22023',
+  null,
+  'a role outside reader/admin is rejected'
+);
+reset role;
 
 -- Demote back down to one admin, then prove the last one is protected.
 set local role authenticated;
