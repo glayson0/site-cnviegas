@@ -55,6 +55,27 @@ enable_confirmations = false
 
 Rationale: no SMTP is configured, so confirmation emails would never send and signups would strand.
 
+**Also reassign the ports.** Another Supabase project on this machine already
+holds the defaults (54321-54324). Leaving them would either fail to start or —
+far worse — point this app at the *other* project's database. In the same
+`config.toml` set:
+
+```toml
+[api]
+port = 54421
+
+[db]
+port = 54422
+
+[studio]
+port = 54423
+
+[inbucket]
+port = 54424
+```
+
+Keep these keys in their existing sections; do not duplicate the section headers.
+
 - [ ] **Step 3: Start the stack**
 
 ```bash
@@ -69,7 +90,7 @@ Create `.env.local.example`:
 
 ```bash
 # Local development (values printed by `supabase start`)
-NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54421
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key from `supabase status`>
 ```
 
@@ -333,7 +354,8 @@ reset role;
 
 -- Anonymous users must see nothing at all in the base table.
 set local role anon;
-set local "request.jwt.claims" to '';
+-- '{}' not '': auth.uid() casts this to jsonb, and ''::jsonb throws.
+set local "request.jwt.claims" to '{}';
 select is(
   (select count(*)::int from public.profiles),
   0,
@@ -699,7 +721,7 @@ Expected: four rows; `admin@cnviegas.org` has role `admin`, the other three `rea
 - [ ] **Step 3: Verify the seeded admin can actually log in**
 
 ```bash
-curl -s -X POST "http://127.0.0.1:54321/auth/v1/token?grant_type=password" \
+curl -s -X POST "http://127.0.0.1:54421/auth/v1/token?grant_type=password" \
   -H "apikey: $(supabase status -o json | grep -o '"ANON_KEY":"[^"]*"' | cut -d'"' -f4)" \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@cnviegas.org","password":"demo123456"}' | head -c 200
@@ -989,13 +1011,27 @@ and change the provider element from `<AuthProvider>` to:
 
 Use `getUser()`, never `getSession()` — only `getUser()` revalidates the JWT.
 
-- [ ] **Step 5: Typecheck**
+- [ ] **Step 5: Typecheck — and understand what it does NOT catch**
 
 ```bash
 npx tsc --noEmit
 ```
 
-Expected: two errors, both in `app/(auth)/login/page.tsx` and `app/(auth)/register/page.tsx`, because those still call the old synchronous signatures. Tasks 8 and 9 fix them. If any *other* file errors, a consumer was missed — fix it before continuing.
+Expected: **exit 0, no errors.** This is the dangerous case, so read carefully.
+The old call sites still compile against the new signatures:
+
+- `const ok = login(email, password); if (ok) { ... }` — `ok` is now a
+  `Promise<AuthResult>`, which is **always truthy**. Login would appear to
+  succeed for every password, including wrong ones.
+- `register(name, email, phone, bioWithInterests)` — `phone` silently lands in
+  the new `password` parameter. Both are `string`, so there is no type error.
+
+TypeScript cannot catch either. Tasks 8 and 9 fix these call sites, and they are
+verified by **behavior**, not by typecheck. Do not treat a clean `tsc` here as
+evidence that the app works.
+
+If a file *other* than the login and register pages errors, a consumer was
+missed — fix it before continuing.
 
 - [ ] **Step 6: Commit**
 
@@ -1039,7 +1075,13 @@ Find the submit handler that calls `login(email, password)`. Replace its body so
   };
 ```
 
-If the file does not already import `useRouter`, add `import { useRouter } from 'next/navigation';` and `const router = useRouter();`.
+The existing handler wraps the call in `setTimeout(...)` to fake latency —
+delete that wrapper; the network call is real now. The file already imports
+`useRouter` and defines `router`.
+
+Note the old code routed admins by checking whether the email contains
+"admin". Replace that with the real role: after a successful login the
+provider has the profile, so route on `/` and let the navbar reflect the role.
 
 - [ ] **Step 2: Make the demo buttons async**
 
@@ -1139,7 +1181,20 @@ After the email field's wrapper block, matching the markup and Tailwind classes 
 
 Copy the `className` from the adjacent email input if it differs from the above — match the file, not this plan.
 
-- [ ] **Step 3: Make the submit handler async and pass interests through**
+- [ ] **Step 3: Delete the bio/interests concatenation**
+
+The current handler folds interests into the bio string:
+
+```tsx
+      const bioWithInterests = `${bio ? bio + ' | ' : ''}Interesses: ${
+        selectedInterests.join(', ') || 'Geral'
+      }`;
+```
+
+Delete those lines. Interests now persist in their own `interests` column, so
+keeping this would duplicate the same data into `bio`.
+
+- [ ] **Step 4: Make the submit handler async and pass interests through**
 
 ```tsx
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1158,7 +1213,7 @@ Copy the `className` from the adjacent email input if it differs from the above 
 
 Add `useRouter` if not already imported.
 
-- [ ] **Step 4: Render the error**
+- [ ] **Step 5: Render the error**
 
 ```tsx
         {error && (
@@ -1168,7 +1223,7 @@ Add `useRouter` if not already imported.
         )}
 ```
 
-- [ ] **Step 5: Typecheck**
+- [ ] **Step 6: Typecheck**
 
 ```bash
 npx tsc --noEmit
@@ -1176,7 +1231,7 @@ npx tsc --noEmit
 
 Expected: exit 0, no errors anywhere.
 
-- [ ] **Step 6: Verify registration persists interests**
+- [ ] **Step 7: Verify registration persists interests**
 
 Register a new account through the UI at `/register`, picking at least two interests, then:
 
@@ -1186,7 +1241,7 @@ supabase db query "select email, name, interests, role from public.profiles wher
 
 Expected: one row, `role` = `reader`, `interests` containing exactly what you selected. This proves the trigger, the metadata plumbing, and the new field all line up.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
 git add "app/(auth)/register/page.tsx"
