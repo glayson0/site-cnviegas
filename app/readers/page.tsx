@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
 import { useLibrary } from '../../context/LibraryContext';
 import { BookCard } from '../../components/BookCard';
@@ -20,6 +21,7 @@ import {
   Search,
   Sparkles,
   ShieldCheck,
+  UserX,
 } from 'lucide-react';
 
 export default function ReaderDashboardPage() {
@@ -42,7 +44,29 @@ export default function ReaderDashboardPage() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const currentUserId = currentUser?.id || 'user-reader-1';
+  if (!currentUser) {
+    return (
+      <div className="flex-1 py-16 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto w-full bg-white dark:bg-black text-black dark:text-white">
+        <div className="py-16 text-center rounded-3xl bg-zinc-50 dark:bg-zinc-950 border border-dashed border-zinc-300 dark:border-zinc-800 p-8 space-y-4">
+          <UserX className="w-12 h-12 text-zinc-400 mx-auto" />
+          <h1 className="text-lg font-bold text-black dark:text-white">
+            Não foi possível carregar seu perfil de leitor
+          </h1>
+          <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+            Sua sessão pode ter expirado ou seu perfil ainda não foi sincronizado. Entre novamente para acessar seus empréstimos e seu cartão de leitor.
+          </p>
+          <Link
+            href="/login"
+            className="inline-block px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-bold shadow hover:bg-red-700 transition-all"
+          >
+            Ir para o Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const currentUserId = currentUser.id;
   const activeLoans = getUserActiveLoans(currentUserId);
   const pastLoans = getUserPastLoans(currentUserId);
   const wishlistedBooks = books.filter((b) => wishlist.includes(b.id));
@@ -82,14 +106,14 @@ export default function ReaderDashboardPage() {
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-black tracking-tight">
-                Olá, {currentUser?.name || 'Carlos Henrique'}!
+                Olá, {currentUser.name}!
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-zinc-900 text-red-400 border border-red-600/40">
                 Membro Ativo
               </span>
             </div>
             <p className="text-xs text-zinc-400">
-              {currentUser?.email || 'leitor@cnviegas.org'} • Biblioteca Coletivo Negro Viegas D&apos;Abreu
+              {currentUser.email} • Biblioteca Coletivo Negro Viegas D&apos;Abreu
             </p>
           </div>
         </div>
@@ -488,8 +512,8 @@ export default function ReaderDashboardPage() {
                 <span className="text-[10px] text-red-400 uppercase tracking-widest block font-bold">
                   Nome do Leitor
                 </span>
-                <p className="text-xl font-black text-white">{currentUser?.name || 'Carlos Henrique'}</p>
-                <p className="text-xs text-zinc-400">{currentUser?.email || 'leitor@cnviegas.org'}</p>
+                <p className="text-xl font-black text-white">{currentUser.name}</p>
+                <p className="text-xs text-zinc-400">{currentUser.email}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-4 border-t border-zinc-800 text-xs">

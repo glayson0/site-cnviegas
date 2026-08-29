@@ -52,9 +52,9 @@ export default function LoginPage() {
       return;
     }
     if (demoRole === 'admin') {
-      addToast('Modo Admin', 'Conectado como Coordenação do Coletivo.');
+      addToast('Modo Admin', 'Conectado como Coordenação da Biblioteca.');
     } else {
-      addToast('Modo Leitor', 'Conectado como Carlos Henrique (Membro Leitor).');
+      addToast('Modo Leitor', 'Conectado como Leitor Comunitário (Membro Leitor).');
     }
     router.push('/');
   };
@@ -100,7 +100,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-600 transition-colors">
-                  Carlos Henrique
+                  Leitor Comunitário
                 </p>
                 <p className="text-[11px] text-zinc-500">Membro Comum</p>
               </div>
@@ -120,7 +120,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-600 transition-colors">
-                  Coordenação
+                  Coordenação da Biblioteca
                 </p>
                 <p className="text-[11px] text-zinc-500">Gestor do Coletivo</p>
               </div>
