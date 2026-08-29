@@ -4,24 +4,23 @@ Sistema de biblioteca da CN Viegas — aplicação [Next.js](https://nextjs.org)
 
 ## Getting Started
 
+Siga os passos nesta ordem — o servidor de desenvolvimento precisa das
+variáveis de ambiente do Supabase local já configuradas, senão ele derruba
+toda rota com um erro 500 (`@supabase/ssr` exige URL e chave anônima).
+
 ```bash
 npm install
+```
+
+1. Suba o stack local do Supabase e configure `.env.local` — veja as seções
+   "Banco de dados local" e "Variáveis de ambiente" abaixo.
+2. Só então inicie o servidor de desenvolvimento:
+
+```bash
 npm run dev
 ```
 
 Abra [http://localhost:3000](http://localhost:3000) no navegador.
-
-## Variáveis de ambiente
-
-Copie `.env.local.example` para `.env.local`:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` com os
-valores impressos por `supabase status` (veja a seção abaixo) — `API_URL` vira
-`NEXT_PUBLIC_SUPABASE_URL` e `ANON_KEY` vira `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 ## Banco de dados local
 
@@ -49,6 +48,18 @@ A confirmação de e-mail está desativada (`enable_confirmations = false` em
 configurado — os cadastros ficam confirmados imediatamente. Para reativar em
 produção é preciso configurar um provedor SMTP em `[auth.email.smtp]` no
 `config.toml` (ou no dashboard do Supabase, se hospedado).
+
+## Variáveis de ambiente
+
+Copie `.env.local.example` para `.env.local`:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` com os
+valores impressos por `supabase status` (veja a seção acima) — `API_URL` vira
+`NEXT_PUBLIC_SUPABASE_URL` e `ANON_KEY` vira `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 ### Contas de demonstração
 
@@ -84,10 +95,14 @@ Novos cadastros recebem `reader`. Apenas admins podem alterar o papel de
 outro usuário, e exclusivamente através da função `set_user_role` — a
 coluna `role` teve seu privilégio de `UPDATE` revogado de `authenticated`,
 então ninguém (nem um admin) consegue alterar papéis com um `UPDATE` direto
-na tabela. Ninguém pode alterar o próprio papel, nem mesmo um admin. O
-último admin não pode ser rebaixado, e `set_user_role` toma um lock de linha
-para que rebaixamentos concorrentes não possam derrubar o número de admins
-para zero.
+na tabela: readers não conseguem sequer chamar a RPC, que é restrita a
+admins. Um admin não consegue se autopromover (já é admin, a chamada é um
+no-op) e não consegue rebaixar a si mesmo se for o último admin restante —
+mas, havendo dois ou mais admins, um admin PODE se autorrebaixar via
+`set_user_role`; essa função não distingue "alvo = quem chama" de qualquer
+outro alvo, ela só impede que o último admin seja rebaixado. `set_user_role`
+também toma um lock de linha para que rebaixamentos concorrentes não possam
+derrubar o número de admins para zero.
 
 ## Scripts
 

@@ -88,7 +88,8 @@ export default function LoginPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <button
               onClick={() => handleDemoLogin('reader')}
-              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2"
+              disabled={loading}
+              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="flex items-center justify-between">
                 <span className="p-2 rounded-xl bg-red-50 dark:bg-red-950 text-red-600">
@@ -108,7 +109,8 @@ export default function LoginPage() {
 
             <button
               onClick={() => handleDemoLogin('admin')}
-              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2"
+              disabled={loading}
+              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="flex items-center justify-between">
                 <span className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-black dark:text-white">
