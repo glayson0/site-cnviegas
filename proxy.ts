@@ -26,7 +26,40 @@ export async function proxy(request: NextRequest) {
   )
 
   // Atualiza o token de autenticação automaticamente
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const path = request.nextUrl.pathname
+  const needsSession = path.startsWith('/admin') || path.startsWith('/readers')
+
+  // Redirect responses must carry the refreshed auth cookies, or the session
+  // is lost on the very next request.
+  const redirectTo = (pathname: string) => {
+    const url = request.nextUrl.clone()
+    url.pathname = pathname
+    const response = NextResponse.redirect(url)
+    supabaseResponse.cookies.getAll().forEach(({ name, value }) => {
+      response.cookies.set(name, value)
+    })
+    return response
+  }
+
+  if (!user && needsSession) {
+    return redirectTo('/login')
+  }
+
+  if (user && path.startsWith('/admin')) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.role !== 'admin') {
+      return redirectTo('/')
+    }
+  }
 
   return supabaseResponse
 }
