@@ -1011,24 +1011,33 @@ and change the provider element from `<AuthProvider>` to:
 
 Use `getUser()`, never `getSession()` — only `getUser()` revalidates the JWT.
 
-- [ ] **Step 5: Typecheck — and understand what it does NOT catch**
+- [ ] **Step 5: Typecheck — expect exactly two errors**
 
 ```bash
 npx tsc --noEmit
 ```
 
-Expected: **exit 0, no errors.** This is the dangerous case, so read carefully.
-The old call sites still compile against the new signatures:
+Expected: **exit 2, with exactly these two errors** (and `npm run build` failing
+on the same):
 
-- `const ok = login(email, password); if (ok) { ... }` — `ok` is now a
-  `Promise<AuthResult>`, which is **always truthy**. Login would appear to
-  succeed for every password, including wrong ones.
-- `register(name, email, phone, bioWithInterests)` — `phone` silently lands in
-  the new `password` parameter. Both are `string`, so there is no type error.
+```
+app/(auth)/login/page.tsx(36,11): error TS2801: This condition will always return true since this 'Promise<AuthResult>' is always defined.
+app/(auth)/register/page.tsx(59,11): error TS2801: This condition will always return true since this 'Promise<AuthResult>' is always defined.
+```
 
-TypeScript cannot catch either. Tasks 8 and 9 fix these call sites, and they are
-verified by **behavior**, not by typecheck. Do not treat a clean `tsc` here as
-evidence that the app works.
+TS2801 fires because both pages do `const ok = login(...); if (ok)`, and `ok` is
+now a Promise — always truthy. Left unfixed this would mean login succeeds for
+every password, so the compiler catching it is genuinely useful. Tasks 8 and 9
+fix these call sites; the branch is knowingly red until then.
+
+**What the compiler does NOT catch — this one is on you.** In
+`app/(auth)/register/page.tsx`, the existing call is
+`register(name, email, phone, bioWithInterests)`. Against the new signature
+`register(name, email, password, phone?, bio?, interests?)`, `phone` silently
+lands in the `password` parameter and `bio` in `phone`. Every argument is a
+`string`, so there is no type error at all. Task 9 must fix the argument list
+deliberately — a clean typecheck after fixing only the `if (ok)` checks would
+still leave registration setting people's passwords to their phone numbers.
 
 If a file *other* than the login and register pages errors, a consumer was
 missed — fix it before continuing.

@@ -9,6 +9,7 @@ export interface User {
   joinedAt: string;
   phone?: string;
   bio?: string;
+  interests?: string[];
   activeLoansCount?: number;
   maxLoansAllowed?: number;
 }

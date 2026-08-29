@@ -1,136 +1,141 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, UserRole } from '../types/library';
-import { INITIAL_USERS } from '../data/initial-data';
+import { createClient } from '../lib/supabase/client';
+import { fetchProfile } from '../lib/profile';
+
+export interface AuthResult {
+  ok: boolean;
+  error?: string;
+}
 
 interface AuthContextType {
   currentUser: User | null;
   role: UserRole;
   isAuthenticated: boolean;
-  login: (email: string, password?: string) => boolean;
-  loginAsDemo: (role: 'reader' | 'admin') => void;
-  logout: () => void;
-  register: (name: string, email: string, phone?: string, bio?: string) => boolean;
-  switchRole: (role: UserRole) => void;
+  login: (email: string, password: string) => Promise<AuthResult>;
+  loginAsDemo: (role: 'reader' | 'admin') => Promise<AuthResult>;
+  logout: () => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    phone?: string,
+    bio?: string,
+    interests?: string[],
+  ) => Promise<AuthResult>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AUTH_STORAGE_KEY = 'cnviegas_library_auth_user';
+// Seeded fixtures from supabase/seed.sql. The password is public by design.
+const DEMO_CREDENTIALS = {
+  admin: { email: 'admin@cnviegas.org', password: 'demo123456' },
+  reader: { email: 'leitor@cnviegas.org', password: 'demo123456' },
+};
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [mounted, setMounted] = useState(false);
+function translateAuthError(message: string): string {
+  if (message.includes('Invalid login credentials')) {
+    return 'E-mail ou senha incorretos.';
+  }
+  if (message.includes('User already registered')) {
+    return 'Este e-mail já está cadastrado.';
+  }
+  if (message.includes('Password should be at least')) {
+    return 'A senha deve ter ao menos 6 caracteres.';
+  }
+  if (message.toLowerCase().includes('rate limit')) {
+    return 'Muitas tentativas. Tente novamente em alguns minutos.';
+  }
+  return 'Não foi possível completar a ação. Tente novamente.';
+}
+
+export function AuthProvider({
+  children,
+  initialUser,
+}: {
+  children: React.ReactNode;
+  initialUser: User | null;
+}) {
+  // Seeded by the server layout, so there is no logged-out flash on load.
+  const [currentUser, setCurrentUser] = useState<User | null>(initialUser);
+  const supabase = useMemo(() => createClient(), []);
+  const router = useRouter();
 
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem(AUTH_STORAGE_KEY);
-      if (savedUser) {
-        setCurrentUser(JSON.parse(savedUser));
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!session?.user) {
+        setCurrentUser(null);
+        return;
       }
-    } catch (e) {
-      console.error('Error loading auth from localStorage', e);
-    }
-    setMounted(true);
-  }, []);
+      setCurrentUser(await fetchProfile(supabase, session.user.id));
+    });
 
-  const saveUser = (user: User | null) => {
-    setCurrentUser(user);
-    if (typeof window !== 'undefined') {
-      if (user) {
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-      } else {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-      }
-    }
+    return () => subscription.unsubscribe();
+  }, [supabase]);
+
+  const login = async (email: string, password: string): Promise<AuthResult> => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+    if (error) return { ok: false, error: translateAuthError(error.message) };
+    router.refresh();
+    return { ok: true };
   };
 
-  const login = (email: string, _password?: string): boolean => {
-    const cleanEmail = email.trim().toLowerCase();
-    
-    // Check against initial users or create reader
-    const foundUser = INITIAL_USERS.find(
-      (u) => u.email.toLowerCase() === cleanEmail
-    );
-
-    if (foundUser) {
-      saveUser(foundUser);
-      return true;
-    }
-
-    // If admin keyword is in email, grant admin, else reader
-    const newRole: UserRole = cleanEmail.includes('admin') ? 'admin' : 'reader';
-    const newUser: User = {
-      id: `user-${Date.now()}`,
-      name: cleanEmail.split('@')[0].replace('.', ' '),
-      email: cleanEmail,
-      role: newRole,
-      avatar: newRole === 'admin' ? '🛡️' : '📚',
-      joinedAt: new Date().toISOString().split('T')[0],
-      activeLoansCount: 0,
-      maxLoansAllowed: newRole === 'admin' ? 10 : 3,
-    };
-
-    saveUser(newUser);
-    return true;
+  const loginAsDemo = (demoRole: 'reader' | 'admin'): Promise<AuthResult> => {
+    const { email, password } = DEMO_CREDENTIALS[demoRole];
+    return login(email, password);
   };
 
-  const loginAsDemo = (role: 'reader' | 'admin') => {
-    if (role === 'admin') {
-      saveUser(INITIAL_USERS[0]);
-    } else {
-      saveUser(INITIAL_USERS[1]);
-    }
+  const logout = async (): Promise<void> => {
+    await supabase.auth.signOut();
+    setCurrentUser(null);
+    router.refresh();
   };
 
-  const logout = () => {
-    saveUser(null);
-  };
-
-  const register = (name: string, email: string, phone?: string, bio?: string): boolean => {
-    const cleanEmail = email.trim().toLowerCase();
-    const newUser: User = {
-      id: `user-${Date.now()}`,
-      name: name.trim(),
-      email: cleanEmail,
-      role: cleanEmail.includes('admin') ? 'admin' : 'reader',
-      avatar: '🌱',
-      joinedAt: new Date().toISOString().split('T')[0],
-      phone: phone?.trim() || '',
-      bio: bio?.trim() || '',
-      activeLoansCount: 0,
-      maxLoansAllowed: 3,
-    };
-
-    saveUser(newUser);
-    return true;
-  };
-
-  const switchRole = (role: UserRole) => {
-    if (role === 'visitor') {
-      saveUser(null);
-    } else if (role === 'admin') {
-      saveUser(INITIAL_USERS[0]);
-    } else {
-      saveUser(INITIAL_USERS[1]);
-    }
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+    phone?: string,
+    bio?: string,
+    interests: string[] = [],
+  ): Promise<AuthResult> => {
+    const { error } = await supabase.auth.signUp({
+      email: email.trim().toLowerCase(),
+      password,
+      options: {
+        data: {
+          name: name.trim(),
+          phone: phone?.trim() ?? '',
+          bio: bio?.trim() ?? '',
+          interests,
+        },
+      },
+    });
+    if (error) return { ok: false, error: translateAuthError(error.message) };
+    router.refresh();
+    return { ok: true };
   };
 
   const role: UserRole = currentUser ? currentUser.role : 'visitor';
-  const isAuthenticated = !!currentUser;
 
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         role,
-        isAuthenticated,
+        isAuthenticated: !!currentUser,
         login,
         loginAsDemo,
         logout,
         register,
-        switchRole,
       }}
     >
       {children}
