@@ -37,13 +37,13 @@ export default function AdminReadersPage() {
         <div>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-red-600 transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-red-900 transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar ao Painel Geral
           </Link>
           <h1 className="text-2xl sm:text-3xl font-black text-black dark:text-white flex items-center gap-2">
-            <Users className="w-7 h-7 text-red-600" />
+            <Users className="w-7 h-7 text-red-900" />
             Leitores & Membros Cadastrados
           </h1>
           <p className="text-xs text-zinc-500">
@@ -97,7 +97,7 @@ export default function AdminReadersPage() {
                       {user.name}
                     </h3>
                     <p className="text-xs text-zinc-500 flex items-center gap-1 mt-0.5">
-                      <Mail className="w-3 h-3 text-red-600" />
+                      <Mail className="w-3 h-3 text-red-900" />
                       {user.email}
                     </p>
                   </div>

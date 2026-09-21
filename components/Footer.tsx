@@ -13,7 +13,7 @@ export function Footer() {
           {/* Brand & Manifesto */}
           <div className="space-y-4 md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center text-white shadow">
+              <div className="w-9 h-9 rounded-xl bg-red-900 flex items-center justify-center text-white shadow">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
               <span className="font-black text-lg text-white">
@@ -34,15 +34,15 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs text-zinc-400">
               <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-red-900 shrink-0 mt-0.5" />
                 <span>Faculdade de Engenharia Elétrica e de Computação (FEEC) - Unicamp</span>
               </li>
               <li className="flex items-start gap-2">
-                <AtSign className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                <AtSign className="w-4 h-4 text-red-900 shrink-0 mt-0.5" />
                 <span>cn.viegasdabreufeec</span>
               </li>
               <li className="flex items-start gap-2">
-                <Mail className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                <Mail className="w-4 h-4 text-red-900 shrink-0 mt-0.5" />
                 <span>cnviegas@unicamp.br</span>
               </li>
             </ul>

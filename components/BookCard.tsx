@@ -32,10 +32,10 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
 
   const solidBg = book.coverColor && !book.coverColor.includes('from-')
     ? book.coverColor
-    : 'bg-red-600';
+    : 'bg-red-900';
 
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl hover:border-red-600/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+    <div className="group relative flex flex-col rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl hover:border-red-900/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
       
       {/* Book Cover / Header Visual (Solid Color) */}
       <div className={`relative h-48 ${solidBg} p-5 flex flex-col justify-between overflow-hidden text-white`}>
@@ -48,7 +48,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
           <div className="flex items-center gap-1.5">
             {book.featured && (
               <span className="p-1 rounded-full bg-black text-white shadow-sm" title="Destaque do Acervo">
-                <Sparkles className="w-3.5 h-3.5 text-red-500" />
+                <Sparkles className="w-3.5 h-3.5 text-red-900" />
               </span>
             )}
             {isAuthenticated && (
@@ -96,13 +96,13 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
             <span
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold text-[11px] ${
                 isAvailable
-                  ? 'bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 border border-red-200 dark:border-red-900'
+                  ? 'bg-red-50 text-red-900 dark:bg-red-950/50 dark:text-red-400 border border-red-200 dark:border-red-900'
                   : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
               }`}
             >
               {isAvailable ? (
                 <>
-                  <CheckCircle className="w-3.5 h-3.5 text-red-600" />
+                  <CheckCircle className="w-3.5 h-3.5 text-red-900" />
                   {book.availableCopies} {book.availableCopies === 1 ? 'exemplar livre' : 'exemplares livres'}
                 </>
               ) : (
@@ -143,7 +143,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
           
           <button
             onClick={() => onSelect(book)}
-            className="text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-red-600 dark:hover:text-red-500 flex items-center gap-1 transition-colors"
+            className="text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:text-red-900 dark:hover:text-red-900 flex items-center gap-1 transition-colors"
           >
             <BookOpen className="w-3.5 h-3.5" />
             Detalhes
@@ -165,7 +165,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
                 )}
                 <button
                   onClick={() => deleteBook(book.id)}
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
+                  className="p-1.5 rounded-lg text-zinc-400 hover:text-red-900 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
                   title="Excluir livro do catálogo"
                   aria-label="Excluir livro"
                 >
@@ -178,7 +178,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
             {role === 'admin' ? (
               <button
                 onClick={() => (onLoan ? onLoan(book) : onSelect(book))}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white transition-all shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-black dark:bg-white text-white dark:text-black hover:bg-red-900 dark:hover:bg-red-900 dark:hover:text-white transition-all shadow-sm"
               >
                 Emprestar
               </button>
@@ -188,7 +188,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
                 disabled={!isAvailable}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm ${
                   isAvailable
-                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    ? 'bg-red-900 hover:bg-red-800 text-white'
                     : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed'
                 }`}
               >
@@ -197,7 +197,7 @@ export function BookCard({ book, onSelect, onEdit, onLoan }: BookCardProps) {
             ) : (
               <button
                 onClick={() => onSelect(book)}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-black dark:bg-white text-white dark:text-black hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white transition-all flex items-center gap-1 shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-black dark:bg-white text-white dark:text-black hover:bg-red-900 dark:hover:bg-red-900 dark:hover:text-white transition-all flex items-center gap-1 shadow-sm"
               >
                 Ver Ficha
                 <ArrowRight className="w-3 h-3" />

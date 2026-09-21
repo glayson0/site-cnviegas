@@ -12,7 +12,7 @@ interface EditBookModalProps {
 }
 
 const SOLID_COLORS = [
-  { label: 'Vermelho Sólido', value: 'bg-red-700' },
+  { label: 'Vermelho Coletivo', value: 'bg-red-900' },
   { label: 'Preto Sólido', value: 'bg-black' },
   { label: 'Cinza Escuro', value: 'bg-zinc-900' },
   { label: 'Vermelho Escuro', value: 'bg-red-950' },
@@ -30,7 +30,7 @@ function EditBookModalContent({ book, onClose }: { book: Book; onClose: () => vo
     pages: book.pages || 100,
     totalCopies: book.totalCopies,
     availableCopies: book.availableCopies,
-    coverColor: book.coverColor && !book.coverColor.includes('from-') ? book.coverColor : 'bg-red-700',
+    coverColor: book.coverColor && !book.coverColor.includes('from-') ? book.coverColor : 'bg-red-900',
     tags: book.tags || [],
   });
 
@@ -49,7 +49,7 @@ function EditBookModalContent({ book, onClose }: { book: Book; onClose: () => vo
         {/* Header */}
         <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-950">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-700">
+            <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-900">
               <Edit className="w-5 h-5" />
             </div>
             <div>
@@ -83,7 +83,7 @@ function EditBookModalContent({ book, onClose }: { book: Book; onClose: () => vo
                 value={formData.title || ''}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
-                className="w-full text-sm p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:ring-2 focus:ring-red-700"
+                className="w-full text-sm p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:ring-2 focus:ring-red-900"
               />
             </div>
 
@@ -187,7 +187,7 @@ function EditBookModalContent({ book, onClose }: { book: Book; onClose: () => vo
                     onClick={() => setFormData({ ...formData, coverColor: col.value })}
                     className={`h-10 rounded-xl ${col.value} text-white text-[11px] font-bold flex items-center justify-center border-2 transition-all ${
                       formData.coverColor === col.value
-                        ? 'border-white ring-2 ring-red-600 scale-102'
+                        ? 'border-white ring-2 ring-red-900 scale-102'
                         : 'border-transparent opacity-80 hover:opacity-100'
                     }`}
                   >
@@ -209,7 +209,7 @@ function EditBookModalContent({ book, onClose }: { book: Book; onClose: () => vo
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-red-700 hover:bg-red-700 text-white text-xs font-bold shadow flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl bg-red-900 hover:bg-red-800 text-white text-xs font-bold shadow flex items-center gap-1.5"
             >
               <Save className="w-4 h-4" />
               Salvar Alterações

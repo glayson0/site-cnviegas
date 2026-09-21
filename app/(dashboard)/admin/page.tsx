@@ -156,7 +156,7 @@ export default function AdminDashboardPage() {
             className="px-3.5 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold flex items-center gap-1.5 border border-zinc-800 transition-all"
             title="Recarregar e sincronizar dados com o Supabase"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-red-500 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-red-900 ${isLoading ? 'animate-spin' : ''}`} />
             {isLoading ? 'Sincronizando...' : 'Sincronizar'}
           </button>
 
@@ -262,7 +262,7 @@ export default function AdminDashboardPage() {
               <p className="text-2xl sm:text-3xl font-black text-black dark:text-white mt-1">
                 {totalTitles}
               </p>
-              <span className="text-[10px] text-red-600 font-bold mt-1 block">
+              <span className="text-[10px] text-red-900 font-bold mt-1 block">
                 Total de títulos catalogados
               </span>
             </div>
@@ -283,7 +283,7 @@ export default function AdminDashboardPage() {
               <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
                 Empréstimos Ativos
               </span>
-              <p className="text-2xl sm:text-3xl font-black text-red-600 mt-1">
+              <p className="text-2xl sm:text-3xl font-black text-red-900 mt-1">
                 {activeLoans.length}
               </p>
               <span className="text-[10px] text-zinc-500 mt-1 block">
@@ -295,7 +295,7 @@ export default function AdminDashboardPage() {
               <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
                 Devoluções Atrasadas
               </span>
-              <p className={`text-2xl sm:text-3xl font-black mt-1 ${overdueLoans.length > 0 ? 'text-red-600' : 'text-black dark:text-white'}`}>
+              <p className={`text-2xl sm:text-3xl font-black mt-1 ${overdueLoans.length > 0 ? 'text-red-900' : 'text-black dark:text-white'}`}>
                 {overdueLoans.length}
               </p>
               <span className="text-[10px] text-zinc-500 mt-1 block">
@@ -324,12 +324,12 @@ export default function AdminDashboardPage() {
             <div className="md:col-span-2 p-6 rounded-3xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-bold text-black dark:text-white flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-red-600" />
+                  <Clock className="w-4 h-4 text-red-900" />
                   Circulação Recente & Pendências de Devolução
                 </h3>
                 <button
                   onClick={() => setActiveTab('loans')}
-                  className="text-xs font-bold text-red-600 hover:underline"
+                  className="text-xs font-bold text-red-900 hover:underline"
                 >
                   Ver todos os {loans.length} →
                 </button>
@@ -367,7 +367,7 @@ export default function AdminDashboardPage() {
             {/* Category breakdown */}
             <div className="p-6 rounded-3xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
               <h3 className="text-base font-bold text-black dark:text-white flex items-center gap-2">
-                <Layers className="w-4 h-4 text-red-600" />
+                <Layers className="w-4 h-4 text-red-900" />
                 Acervo por Categoria
               </h3>
 
@@ -424,7 +424,7 @@ export default function AdminDashboardPage() {
         <div className="max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xl space-y-6">
           <div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
             <h2 className="text-xl font-black text-black dark:text-white flex items-center gap-2">
-              <PlusCircle className="w-5 h-5 text-red-600" />
+              <PlusCircle className="w-5 h-5 text-red-900" />
               Cadastrar Nova Obra no Acervo
             </h2>
             <p className="text-xs text-zinc-500">
@@ -603,7 +603,7 @@ export default function AdminDashboardPage() {
                           {isReturned ? (
                             <span className="text-zinc-500">Devolvido ({loan.returnedDate})</span>
                           ) : (
-                            <span className={isOverdue ? 'text-red-600 font-bold' : ''}>
+                            <span className={isOverdue ? 'text-red-900 font-bold' : ''}>
                               {loan.dueDate}
                             </span>
                           )}
@@ -615,7 +615,7 @@ export default function AdminDashboardPage() {
                                 ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
                                 : isOverdue
                                 ? 'bg-red-600 text-white'
-                                : 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400 border border-red-200 dark:border-red-900'
+                                : 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-400 border border-red-200 dark:border-red-900'
                             }`}
                           >
                             {isReturned ? 'Devolvido' : isOverdue ? 'Atrasado' : 'Em Aberto'}
@@ -709,7 +709,7 @@ export default function AdminDashboardPage() {
                     </p>
                     <p className="text-zinc-700 dark:text-zinc-300">
                       📚 <strong>Livros em posse:</strong>{' '}
-                      <span className="font-bold text-red-600">
+                      <span className="font-bold text-red-900">
                         {userActiveLoans.length}
                       </span>{' '}
                       livro(s)

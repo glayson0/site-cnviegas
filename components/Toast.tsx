@@ -13,17 +13,17 @@ export function ToastContainer() {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
       {toasts.map((toast) => {
         const icons = {
-          success: <CheckCircle2 className="w-5 h-5 text-red-600 shrink-0" />,
-          error: <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />,
+          success: <CheckCircle2 className="w-5 h-5 text-red-900 shrink-0" />,
+          error: <AlertCircle className="w-5 h-5 text-red-900 shrink-0" />,
           info: <Info className="w-5 h-5 text-zinc-300 shrink-0" />,
-          warning: <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />,
+          warning: <AlertTriangle className="w-5 h-5 text-red-900 shrink-0" />,
         };
 
         const borderStyles = {
-          success: 'border-red-600 bg-black text-white',
-          error: 'border-red-600 bg-red-950 text-white',
+          success: 'border-red-900 bg-black text-white',
+          error: 'border-red-900 bg-red-950 text-white',
           info: 'border-zinc-700 bg-black text-white',
-          warning: 'border-red-600 bg-black text-white',
+          warning: 'border-red-900 bg-black text-white',
         };
 
         return (

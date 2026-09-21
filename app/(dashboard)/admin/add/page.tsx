@@ -65,12 +65,12 @@ export default function AdminAddBookPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/admin"
-          className="inline-flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-red-600 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-red-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Voltar ao Painel Admin
         </Link>
-        <span className="text-xs text-red-600 font-bold">
+        <span className="text-xs text-red-900 font-bold">
           Módulo de Catalogação
         </span>
       </div>
@@ -81,7 +81,7 @@ export default function AdminAddBookPage() {
         <div className="lg:col-span-2 p-6 sm:p-8 rounded-3xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xl space-y-6">
           <div className="space-y-1">
             <h1 className="text-2xl font-black text-black dark:text-white flex items-center gap-2">
-              <PlusCircle className="w-6 h-6 text-red-600" />
+              <PlusCircle className="w-6 h-6 text-red-900" />
               Adicionar Novo Livro ao Acervo
             </h1>
             <p className="text-xs text-zinc-500">
@@ -269,7 +269,7 @@ export default function AdminAddBookPage() {
             </div>
 
             <div className="p-4 space-y-2 text-xs">
-              <span className="inline-flex items-center gap-1 text-red-600 font-bold">
+              <span className="inline-flex items-center gap-1 text-red-900 font-bold">
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 {copies} {copies === 1 ? 'exemplar disponível' : 'exemplares disponíveis'}
               </span>

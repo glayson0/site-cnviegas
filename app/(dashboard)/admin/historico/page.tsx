@@ -53,13 +53,13 @@ export default function AdminHistoricoPage() {
         <div>
           <Link
             href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-red-600 transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-red-900 transition-colors mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Voltar ao Painel Geral
           </Link>
           <h1 className="text-2xl sm:text-3xl font-black text-black dark:text-white flex items-center gap-2">
-            <History className="w-7 h-7 text-red-600" />
+            <History className="w-7 h-7 text-red-900" />
             Histórico & Controle de Empréstimos
           </h1>
           <p className="text-xs text-zinc-500">
@@ -81,7 +81,7 @@ export default function AdminHistoricoPage() {
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xs flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-600">
+          <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-900">
             <Clock className="w-5 h-5" />
           </div>
           <div>
@@ -93,11 +93,11 @@ export default function AdminHistoricoPage() {
         </div>
 
         <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xs flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-600">
+          <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-900">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xl font-black text-red-600">
+            <span className="text-xl font-black text-red-900">
               {overdueCount}
             </span>
             <p className="text-xs text-zinc-500">Devoluções Atrasadas</p>
@@ -106,7 +106,7 @@ export default function AdminHistoricoPage() {
 
         <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xs flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white">
-            <CheckCircle className="w-5 h-5 text-red-600" />
+            <CheckCircle className="w-5 h-5 text-red-900" />
           </div>
           <div>
             <span className="text-xl font-black text-black dark:text-white">
@@ -218,7 +218,7 @@ export default function AdminHistoricoPage() {
                         {isReturned ? (
                           <span className="text-zinc-500">Devolvido ({loan.returnedDate})</span>
                         ) : (
-                          <span className={isOverdue ? 'text-red-600 font-bold' : ''}>
+                          <span className={isOverdue ? 'text-red-900 font-bold' : ''}>
                             {loan.dueDate}
                           </span>
                         )}
@@ -230,7 +230,7 @@ export default function AdminHistoricoPage() {
                               ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
                               : isOverdue
                               ? 'bg-red-600 text-white'
-                              : 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400 border border-red-200 dark:border-red-900'
+                              : 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-400 border border-red-200 dark:border-red-900'
                           }`}
                         >
                           {isReturned ? 'Devolvido' : isOverdue ? 'Atrasado' : 'Em Aberto'}

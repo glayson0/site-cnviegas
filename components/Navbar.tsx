@@ -48,13 +48,13 @@ export function Navbar() {
           {/* Brand */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-red-900 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
               <div className="flex flex-col">
                 <span className="font-black text-base sm:text-lg tracking-tight text-black dark:text-white flex items-center gap-1.5">
                   Biblioteca Coletivo
-                  <span className="hidden xs:inline-block px-1.5 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded">
+                  <span className="hidden xs:inline-block px-1.5 py-0.5 text-[10px] font-bold bg-red-900 text-white rounded">
                     Negro Viegas D&apos;Abreu
                   </span>
                 </span>
@@ -75,14 +75,14 @@ export function Navbar() {
                 href="/readers"
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                   isActive('/readers')
-                    ? 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-bold border border-red-200 dark:border-red-900'
-                    : 'text-zinc-700 dark:text-zinc-300 hover:text-red-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                    ? 'bg-red-50 dark:bg-red-950/40 text-red-900 dark:text-red-400 font-bold border border-red-200 dark:border-red-900'
+                    : 'text-zinc-700 dark:text-zinc-300 hover:text-red-900 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                 }`}
               >
-                <UserIcon className="w-4 h-4 text-red-600" />
+                <UserIcon className="w-4 h-4 text-red-900" />
                 Painel do Leitor
                 {activeLoans.length > 0 && (
-                  <span className="ml-1 px-1.5 py-0.2 text-[10px] font-bold bg-red-600 text-white rounded-full">
+                  <span className="ml-1 px-1.5 py-0.2 text-[10px] font-bold bg-red-900 text-white rounded-full">
                     {activeLoans.length}
                   </span>
                 )}
@@ -96,11 +96,11 @@ export function Navbar() {
                   href="/admin"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     pathname === '/admin'
-                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-600 font-bold border border-red-600/30'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-900 font-bold border border-red-900/30'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-900 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
-                  <Shield className="w-4 h-4 text-red-600" />
+                  <Shield className="w-4 h-4 text-red-900" />
                   Painel Admin
                 </Link>
 
@@ -108,11 +108,11 @@ export function Navbar() {
                   href="/admin/add"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     pathname === '/admin/add'
-                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-600 font-bold'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-900 font-bold'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-900 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
-                  <PlusCircle className="w-4 h-4 text-red-600" />
+                  <PlusCircle className="w-4 h-4 text-red-900" />
                   + Novo Livro
                 </Link>
 
@@ -120,8 +120,8 @@ export function Navbar() {
                   href="/admin/historico"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     pathname === '/admin/historico'
-                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-600 font-bold'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-900 font-bold'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-900 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
                   <History className="w-4 h-4" />
@@ -132,8 +132,8 @@ export function Navbar() {
                   href="/admin/readers"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     pathname === '/admin/readers'
-                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-600 font-bold'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-600 hover:bg-zinc-50 dark:hover:bg-zinc-900'
+                      ? 'bg-zinc-100 dark:bg-zinc-900 text-red-900 font-bold'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:text-red-900 hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -162,7 +162,7 @@ export function Navbar() {
                 <button
                   onClick={handleLogout}
                   title="Sair da conta"
-                  className="p-2 rounded-xl text-zinc-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 border border-transparent hover:border-red-200 dark:hover:border-red-900 transition-all"
+                  className="p-2 rounded-xl text-zinc-500 hover:text-red-900 hover:bg-red-50 dark:hover:bg-red-950/40 border border-transparent hover:border-red-200 dark:hover:border-red-900 transition-all"
                   aria-label="Sair"
                 >
                   <LogOut className="w-4 h-4" />
@@ -179,7 +179,7 @@ export function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-1.5 rounded-xl text-sm font-bold bg-red-600 hover:bg-red-700 text-white shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-xl text-sm font-bold bg-red-900 hover:bg-red-800 text-white shadow-sm hover:shadow transition-all flex items-center gap-1.5"
                 >
                   <UserPlus className="w-4 h-4" />
                   Cadastrar
@@ -209,7 +209,7 @@ export function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-base font-medium transition-colors ${
               pathname === '/' || pathname === '/books'
-                ? 'text-red-600 font-bold bg-zinc-100 dark:bg-zinc-900'
+                ? 'text-red-900 font-bold bg-zinc-100 dark:bg-zinc-900'
                 : 'text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900'
             }`}
           >
@@ -221,7 +221,7 @@ export function Navbar() {
             <Link
               href="/readers"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-base font-bold text-red-600 bg-red-50 dark:bg-red-950/40"
+              className="block px-3 py-2 rounded-lg text-base font-bold text-red-900 bg-red-50 dark:bg-red-950/40"
             >
               Painel do Leitor (Empréstimos e Histórico)
             </Link>
@@ -235,7 +235,7 @@ export function Navbar() {
               <Link
                 href="/admin"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-base font-bold text-red-600"
+                className="block px-3 py-2 rounded-lg text-base font-bold text-red-900"
               >
                 Painel Geral & Métricas
               </Link>
@@ -275,7 +275,7 @@ export function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-600 hover:bg-red-100 dark:hover:bg-red-950"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-900 hover:bg-red-100 dark:hover:bg-red-950"
                 >
                   Sair
                 </button>
@@ -292,7 +292,7 @@ export function Navbar() {
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center px-4 py-2.5 rounded-xl bg-red-600 text-sm font-bold text-white shadow"
+                  className="w-full text-center px-4 py-2.5 rounded-xl bg-red-900 hover:bg-red-800 text-sm font-bold text-white shadow"
                 >
                   Cadastrar
                 </Link>

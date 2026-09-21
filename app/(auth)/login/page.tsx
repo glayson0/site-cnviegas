@@ -66,7 +66,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 mb-2 group">
-            <div className="w-12 h-12 rounded-2xl bg-red-600 flex items-center justify-center text-white shadow-lg shadow-red-950/30 group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-red-900 flex items-center justify-center text-white shadow-lg shadow-red-950/30 group-hover:scale-105 transition-transform">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
           </Link>
@@ -80,8 +80,8 @@ export default function LoginPage() {
 
         {/* 1-CLICK DEMO ACCESS CARDS */}
         <div className="p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-red-600 uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-red-600" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-red-900 uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-red-900" />
             Acesso Rápido de Demonstração (1 Clique)
           </div>
           
@@ -89,18 +89,18 @@ export default function LoginPage() {
             <button
               onClick={() => handleDemoLogin('reader')}
               disabled={loading}
-              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-900 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="flex items-center justify-between">
-                <span className="p-2 rounded-xl bg-red-50 dark:bg-red-950 text-red-600">
+                <span className="p-2 rounded-xl bg-red-50 dark:bg-red-950 text-red-900">
                   <UserCheck className="w-4 h-4" />
                 </span>
-                <span className="text-[10px] font-bold text-red-600 bg-red-50 dark:bg-red-950 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-bold text-red-900 bg-red-50 dark:bg-red-950 px-2 py-0.5 rounded">
                   Leitor
                 </span>
               </div>
               <div>
-                <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-600 transition-colors">
+                <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-900 transition-colors">
                   Leitor Comunitário
                 </p>
                 <p className="text-[11px] text-zinc-500">Membro Comum</p>
@@ -110,7 +110,7 @@ export default function LoginPage() {
             <button
               onClick={() => handleDemoLogin('admin')}
               disabled={loading}
-              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-600 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="p-3 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-red-900 hover:shadow-md transition-all text-left group flex flex-col justify-between gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="flex items-center justify-between">
                 <span className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-black dark:text-white">
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 </span>
               </div>
               <div>
-                <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-600 transition-colors">
+                <p className="text-xs font-bold text-black dark:text-white group-hover:text-red-900 transition-colors">
                   Coordenação da Biblioteca
                 </p>
                 <p className="text-[11px] text-zinc-500">Gestor do Coletivo</p>
@@ -138,7 +138,7 @@ export default function LoginPage() {
             </span>
             <Link
               href="/register"
-              className="text-xs font-bold text-red-600 hover:text-red-700"
+              className="text-xs font-bold text-red-900 hover:text-red-900"
             >
               Criar conta nova →
             </Link>
@@ -157,7 +157,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="ex: leitor@cnviegas.org ou seu@email.com"
                   required
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-600"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-900"
                 />
               </div>
             </div>
@@ -173,13 +173,13 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-600"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-900"
                 />
               </div>
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+              <p className="text-sm text-red-900 dark:text-red-900" role="alert">
                 {error}
               </p>
             )}
@@ -187,7 +187,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-bold shadow-md shadow-red-950/20 transition-all flex items-center justify-center gap-2 hover:scale-101"
+              className="w-full py-3 rounded-xl bg-red-900 hover:bg-red-800 text-white text-sm font-bold shadow-md shadow-red-950/20 transition-all flex items-center justify-center gap-2 hover:scale-101"
             >
               <LogIn className="w-4 h-4" />
               {loading ? 'Entrando...' : 'Entrar no Sistema'}
@@ -198,7 +198,7 @@ export default function LoginPage() {
           <div className="pt-2 text-center border-t border-zinc-100 dark:border-zinc-800">
             <Link
               href="/"
-              className="text-xs text-zinc-500 hover:text-red-600 inline-flex items-center gap-1 font-semibold"
+              className="text-xs text-zinc-500 hover:text-red-900 inline-flex items-center gap-1 font-semibold"
             >
               <Eye className="w-3.5 h-3.5" />
               Apenas consultar o acervo sem autenticação

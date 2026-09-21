@@ -46,7 +46,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
         {/* Header */}
         <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-600">
+            <div className="p-2.5 rounded-xl bg-red-50 dark:bg-red-950 text-red-900">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
@@ -71,7 +71,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
           
           {/* Selected Book Summary */}
           <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
-            <span className="text-[10px] font-bold text-red-600 uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-red-900 uppercase tracking-wider">
               Livro Selecionado
             </span>
             <h4 className="text-base font-black text-black dark:text-white">{book.title}</h4>
@@ -82,7 +82,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
           </div>
 
           {!isAvailable && (
-            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-900 dark:text-red-400 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>Atenção: Todos os exemplares deste livro já estão emprestados no momento.</span>
             </div>
@@ -97,7 +97,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                className="w-full text-sm p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-600"
+                className="w-full text-sm p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-900"
                 required
               >
                 {users
@@ -115,7 +115,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
                 Leitor Requisitante:
               </label>
               <div className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-xs text-black dark:text-white flex items-center gap-2 font-semibold">
-                <UserCheck className="w-4 h-4 text-red-600" />
+                <UserCheck className="w-4 h-4 text-red-900" />
                 {currentUser?.name} ({currentUser?.email})
               </div>
             </div>
@@ -138,8 +138,8 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
                   onClick={() => setLoanDays(opt.val)}
                   className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all text-center ${
                     loanDays === opt.val
-                      ? 'bg-red-600 border-red-600 text-white shadow-sm'
-                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-red-600'
+                      ? 'bg-red-900 border-red-900 text-white shadow-sm'
+                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-red-900'
                   }`}
                 >
                   {opt.label}
@@ -158,7 +158,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex: Leitura para oficina do coletivo, grupo de estudos, etc."
               rows={2}
-              className="w-full text-xs p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-600"
+              className="w-full text-xs p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-black dark:text-white focus:outline-hidden focus:ring-2 focus:ring-red-900"
             />
           </div>
 
@@ -176,7 +176,7 @@ export function LoanModal({ book, isOpen, onClose }: LoanModalProps) {
               disabled={!isAvailable}
               className={`px-5 py-2.5 rounded-xl text-xs font-bold shadow transition-all ${
                 isAvailable
-                  ? 'bg-red-600 hover:bg-red-700 text-white'
+                  ? 'bg-red-900 hover:bg-red-800 text-white'
                   : 'bg-zinc-300 dark:bg-zinc-800 text-zinc-500 cursor-not-allowed'
               }`}
             >
